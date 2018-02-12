@@ -1,6 +1,8 @@
 var nodes = [];
 var numNodes = 50;
 var node;
+var canvas_height;
+var canvas_width;
 
 function setup () {
 	createCanvas(1000, 480)
@@ -14,6 +16,7 @@ function draw () {
 	for (j = 0; j < numNodes; j++) {
 		nodes[j].place(nodes);
 	}
+	background(200);
 	for (k = 0; k < numNodes; k++) {
 		nodes[k].disp();
 		nodes[k].move();	
