@@ -1,12 +1,13 @@
 var nodes = [];
+var deadNodes = [];
 var numNodes = 50;
 var node;
-var canvas_height;
-var canvas_width;
+var canvas_height = 480;
+var canvas_width = 1000;
 var number_of_remaining_nodes;
 
 function setup () {
-	createCanvas(1000, 480)
+	createCanvas(canvas_width, canvas_height)
 	for( i= 0; i < numNodes; i++) {
 		n = new circObj(30, i)
 		nodes.push(n);
@@ -48,7 +49,7 @@ function circObj(d, id){
 
 	this.place = function(objArray){
 			for(i=0;i<objArray.length;i++){
-				if( this.id != i && !this.isDead){ //dont do the check if it is looking at itself
+				if( this.id != i && !this.isDead && !objArray[i].isDead){ //dont do the check if it is looking at itself, or one circle isDead
 					this.hit = collideCircleCircle(this.x, this.y, this.d, objArray[i].x, objArray[i].y, objArray[i].d); //colliding with anything?
 					if( this.hit == true ){ // if we ever get a true we have to try again, this works since we iterate down through the objects one by one.
 						this.isDead = true
@@ -64,10 +65,15 @@ function circObj(d, id){
 			ellipse(this.x,this.y,this.d,this.d);
 		}
 	}
-	
+
 	this.move = function(){
 		this.x = this.x + this.accelerationX
 		this.y = this.y + this.accelerationY
+		// Bounce if we hit a canvas wall
+		if (this.x <= 0 || this.y <= 0 || this.x >= canvas_width || this.y >= canvas_height) {
+			this.accelerationX =- this.accelerationX
+			this.accelerationY =- this.accelerationY
+		}
 	}
 
 }
